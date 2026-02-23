@@ -1,0 +1,57 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Products List</title>
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 50%;
+            margin-top: 20px;
+        }
+
+        th, td {
+            border: 1px solid #ccc;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f4f4f4;
+        }
+    </style>
+</head>
+<body>
+    <h1>Products List</h1>
+    <table id="productsTable">
+        <thead>
+            <tr><th>Id</th><th>Name</th><th>Price</th></tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+
+    <script>
+        async function loadProducts() {
+            try {
+                const response = await fetch('/api/product');
+                const products = await response.json();
+                const tbody = document.querySelector('#productsTable tbody');
+                tbody.innerHTML = '';
+
+
+                products.forEach(p => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `<td>${p.id}</td><td>${p.name}</td><td>${p.price}</td>`;
+                    tbody.appendChild(row);
+                });
+
+            } catch (err) {
+                console.error('Error loading products:', err);
+            }
+        }
+        loadProducts();
+    </script>
+
+
+</body>
+</html>
