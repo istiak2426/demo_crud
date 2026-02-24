@@ -24,6 +24,8 @@ var app = builder.Build();
 
 // Configure the HTTP request pipeline.
 
+app.UseDefaultFiles();   // 👈 this enables index.html as default
+
 app.UseStaticFiles();  // ✅ Serve wwwroot files
 
 app.UseHttpsRedirection();
