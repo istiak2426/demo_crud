@@ -1,22 +1,28 @@
 # Use official .NET SDK image for build
 FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
-WORKDIR /app
+WORKDIR /src
 
-# Copy csproj and restore
-COPY *.csproj ./
-RUN dotnet restore
+# Copy csproj from project folder
+COPY WebApplication1/WebApplication1.csproj WebApplication1/
 
-# Copy everything else and build
-COPY . ./
-RUN dotnet publish -c Release -o out
+# Restore
+RUN dotnet restore WebApplication1/WebApplication1.csproj
+
+# Copy everything else
+COPY . .
+
+# Move into project folder
+WORKDIR /src/WebApplication1
+
+# Publish
+RUN dotnet publish -c Release -o /app/out
 
 # Use official runtime image
 FROM mcr.microsoft.com/dotnet/aspnet:9.0
 WORKDIR /app
 COPY --from=build /app/out .
 
-# Expose port
 EXPOSE 80
 
-# Start the app
 ENTRYPOINT ["dotnet", "WebApplication1.dll"]
+
